@@ -10,7 +10,8 @@ class Perceptron:
         self._learning_rate = learning_rate
 
     def activation_function(self, x):
-        return 1 if x >= 0 else 0
+        return max(0, x)
+        # return 1 if x >= 0 else 0
 
     def predict(self, inputs):
         weighted_sum = np.sum(np.multiply(inputs, self._weights))
