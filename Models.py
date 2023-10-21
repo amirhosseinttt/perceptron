@@ -3,10 +3,10 @@ import numpy as np
 
 class Perceptron:
     _weights = None
-
+    _bias = 0
     def __init__(self, input_size):
         self._weights = np.zeros(input_size)
-        print(self._weights.shape)
+
 
     @staticmethod
     def activation_function(x):
@@ -23,7 +23,7 @@ class Perceptron:
         if inputs.shape[1] != self._weights.shape[0]:
             raise Exception(f'Inputs shape {inputs.shape} does not match weights shape {self._weights.shape}')
 
-        weighted_sum = np.sum(inputs * self._weights, axis=1)
+        weighted_sum = np.sum(inputs * self._weights + self._bias, axis=1)
 
         return [self.activation_function(i) for i in weighted_sum]
 
@@ -35,7 +35,7 @@ class Perceptron:
                 error = (label - prediction)
                 error_sum += abs(error)
                 self._weights += learning_rate * error * sample
-                # print(learning_rate * error * sample)
+                self._bias += learning_rate * error
 
             print(f'Epoch: {epoch_number}, Error: {error_sum}')
 
