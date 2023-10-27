@@ -12,7 +12,7 @@ class Perceptron:
     @staticmethod
     def activation_function(x):  # step function
         # return max(0, x)
-        return 1 if x >= 0 else 0
+        return 1 if x >= 0 else -1
 
     def predict(self, inputs):
         if len(inputs.shape) == 1:
@@ -59,7 +59,7 @@ class Adaline:
     @staticmethod
     def activation_function(x):  # step function
         # return max(0, x)
-        return 1 if x >= 0 else 0
+        return 1 if x >= 0 else -1
 
     def predict(self, inputs):
         if len(inputs.shape) == 1:
@@ -87,11 +87,9 @@ class Adaline:
                 error = (label - reg_pred)
                 error_sum += abs(error)
                 self._weights += learning_rate * error * np.array([self._bias, *sample])
-                # self._weights[1:] += learning_rate * sample.T.dot(error).reshape(self._weights[1:].shape)
 
             print(f'Epoch: {epoch_number}, Error: {error_sum}')
 
-        # print(self._weights)
 
     def get_weights(self):
         return self._weights
@@ -110,6 +108,12 @@ class CustomModel:
 
     def predict(self, inputs):
         _, cls_pred = self.adaline.predict(inputs)
+        output = []
+        for index, pred in enumerate(cls_pred):
+            self.perceptron._bias = pred
+            pereceptron_pred = self.perceptron.predict(inputs[index])[0]
+            output.append(pereceptron_pred)
+        return np.array(output)
 
         output = []
         for pred in cls_pred:
